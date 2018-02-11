@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>imageLoader</title>
+</head>
+
+<body>
+
+    <div id="loader">
+        <h3>Preloader</h3>
+        <div id="total-images">Total images to load: <span></span></div>
+        <div id="images-loaded">Images loaded already: <span></span></div>
+        <div id="percent">Percent: <span></span>%</div>
+    </div>
+
+    <hr />
+
+    <button id="more-images">Load more images</button>
+
+    <hr />
+
+    <div id="first-wrapper">
+
+        <h3>Sample background image</h3>
+        <div data-src-bg="https://placeholdit.imgix.net/~text?txtsize=60&bg=ff0000&txtclr=000000&txt=640%C3%97480&w=640&h=480" style="width: 640px; height: 480px"></div>
+        <ul>
+            <li>Before: 
+                <code>
+                     &lt;div data-src-bg="URL" style="width: 640px; height: 480px"&gt;&lt;/div&gt;
+                </code>
+            </li>
+            <li>
+                After:
+                <code>
+                     &lt;div style="width: 640px; height: 480px; background-image: url('URL')"&gt;&lt;/div&gt;
+                </code>
+            </li>
+        </ul>
+
+
+        <h3>Sample background image with class</h3>
+        <div data-src-bg="https://placeholdit.imgix.net/~text?txtsize=60&bg=ff0000&txtclr=000000&txt=320%C3%97480&w=320&h=480" data-class="so_much_class another_class" style="width: 320px; height: 480px"></div>
+        <ul>
+            <li>Before:
+                <code>
+                     &lt;div data-src-bg="URL" data-class="so_much_class another_class" style="width: 320px; height: 480px"&gt;&lt;/div&gt;
+                </code>
+            </li>
+            <li>
+                After:
+                <code>
+                     &lt;div style="width: 320px; height: 480px; background-image: url('URL');" class="so_much_class another_class"&gt;&lt;/div&gt;
+                </code>
+            </li>
+        </ul>
+
+
+        <h3>Simple image with class, id, copied data</h3>
+        <span id="this-is-copied-id" data-copied="this_attribute_is_copied" data-copied2="also_copied" data-src="https://placeholdit.imgix.net/~text?txtsize=45&bg=000000&txtclr=ff0000&txt=480%C3%97640&w=480&h=640" data-alt="This image is 1st" data-class="this_image_has_class"></span>
+        <ul>
+            <li>Before:
+                <code>
+                     &lt;span id="this-is-copied-id" data-copied="this_attribute_is_copied" data-copied2="also_copied" data-src="URL" data-alt="This image is 1st" data-class="this_image_has_class"&gt;&lt;/span&gt;
+                </code>
+            </li>
+            <li>
+                After:
+                <code>
+                     &lt;img src="URL" id="this-is-copied-id" alt="This image is 1st" class="this_image_has_class" data-copied="this_attribute_is_copied" data-copied2="also_copied"&gt;
+                </code>
+            </li>
+        </ul>
+
+    </div>
+
+    <hr />
+
+    <div id="second-wrapper">
+        <h3>More images</h3>
+        <span data-src="https://placeholdit.imgix.net/~text?txtsize=45&bg=000000&txtclr=ff0000&txt=480%C3%97640&w=420&h=640" data-alt="This image is 2nd"></span>
+        <span data-src="https://placeholdit.imgix.net/~text?txtsize=45&bg=000000&txtclr=ff0000&txt=640%C3%97420&w=640&h=420" data-alt="This image is 3rd"></span>
+        <span data-src="https://placeholdit.imgix.net/~text?txtsize=45&bg=000000&txtclr=ff0000&txt=480%C3%97420&w=480&h=420" data-alt="This image is 4th"></span>
+        <span data-src="https://placeholdit.imgix.net/~text?txtsize=45&bg=000000&txtclr=ff0000&txt=420%C3%97360&w=420&h=360" data-alt="This image is 5th"></span>
+        <span data-src="https://placeholdit.imgix.net/~text?txtsize=45&bg=000000&txtclr=ff0000&txt=360%C3%97640&w=360&h=640" data-alt="This image is 6th"></span>
+    </div>
+
+    <script src="imageLoader.js"></script>
+    <script>
+
+        // Bind loader update action
+        document.getElementById('loader').addEventListener('loader-updated', function(){
+            document.querySelector('#total-images span').innerText = imageLoader.preloadData.imageCount;
+            document.querySelector('#images-loaded span').innerText = imageLoader.preloadData.imagesLoaded;
+            document.querySelector('#percent span').innerText = imageLoader.preloadData.percent;
+        }, false);
+
+        // Do the loading
+        imageLoader.loadSceneImages('first-wrapper', 'loader')
+            .then(function(){
+                console.log('All images loaded from #first-wrapper');
+            });
+
+        // Bind load more button
+        document.getElementById('more-images').addEventListener('click', function(e){
+            imageLoader.loadSceneImages('second-wrapper', 'loader')
+                .then(function () {
+                    console.log('All images loaded from #second-wrapper');
+                });
+        });
+
+    </script>
+
+</body>
+</html>
